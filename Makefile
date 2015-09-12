@@ -1,10 +1,15 @@
 TARGET   = SimCooling.exe
 TARGET1  = RunAnalysis.exe
 CXX      = g++
-OBJECTS  = QuenchMain.o QSuperconduct.o QMaterial.o FillData.o
-OBJECTS1 = runAnalysis.o QAnalysis.o
+SRC1     = QuenchMain.cpp QSuperconduct.cpp QMaterial.cpp FillData.cpp
+SRC2     = runAnalysis.cpp QAnalysis.cpp
+OBJECTS  = $(SRC1:.cpp=.o)
+OBJECTS1 = $(SRC2:.cpp=.o)
 CXXLIBS  = 
 CXXFLAGS = -Wall -O3
+
+OBJS = $(OBJECTS) $(OBJECTS1)
+SRCS = $(SRC1) $(SRC2)
 
 ROOTFLAGS = `root-config --cflags`
 ROOTLIBS  = `root-config --glibs`
@@ -23,8 +28,8 @@ $(TARGET): $(OBJECTS)
 $(TARGET1): $(OBJECTS1)
 	$(CXX) $(CXXLIBS) $^ -o $@
 
-.o:.cpp
-	$(CXX) $(CXXFLAGS) -c $<
+$(OBJS): $(SRCS)
+	$(CXX) $(CXXFLAGS) -c $(SRCS)
 
 .PHONY: clean
 clean:

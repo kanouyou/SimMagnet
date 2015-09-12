@@ -31,7 +31,7 @@ int main(){
 	}
   }
   
-  double T5;
+  //double T5;
   double Qr, Qrr, Qp, Qpp, Qz, Qzz, Q;
   double kAl, kCdt, ktape, term1, term2;
   
@@ -157,8 +157,8 @@ int main(){
 		  Q = Qzz + Qpp + Qrr - Qz - Qp - Qr;
 		  T[i][j][k] = preT[i][j][k] + Mesh::dt * Q;
           
-		  if (i==1 && j==1 && k==2) 
-		    T5 = Q;
+		  //if (i==1 && j==1 && k==2) 
+		    //T5 = Q;
 		}
 	  }
 	}
@@ -174,7 +174,7 @@ int main(){
 	double T4 = T[1][1][1];
 
 	if (t%1000==0) {
-	  printf("time= %.2f [sec]  T1= %.4f  T2= %.4f  T3= %.4f  T4= %.4f [K] Q= %.2f\n", Time, T1, T2, T3, T4, T5);
+	  printf("time= %.2f [h]  T1= %.4f  T2= %.4f  T3= %.4f  T4= %.4f [K] Q= %.2f\n", Time/3600, T1, T2, T3, T4, T5);
 	  for (int i=1; i<Mesh::Mz; i++) {
         for (int j=1; j<Mesh::Mphi; j++) {
           for (int k=1; k<Mesh::Mr; k++) {
