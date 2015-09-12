@@ -15,8 +15,8 @@ namespace Mesh {
   const int    Mr   = 19 + 1;
   // time mesh:
   const double t0   = 0.;
-  const double tf   = 10000.;
-  const int    Mt   = 10000000;
+  const double tf   = 100000.;
+  const int    Mt   = 100000;
   const double dt   = (tf - t0) / Mt;
 }
 
@@ -345,7 +345,7 @@ void WriteQuenchVelocity() {
 }
 
 void WriteParameter(std::string fName) {
-  std::ofstream output(fName);
+  std::ofstream output(fName.c_str());
 
   if (output.fail())
     std::cout << " Cannot open this file." << std::endl;

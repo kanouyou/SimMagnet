@@ -7,7 +7,7 @@ CXXLIBS  =
 CXXFLAGS = -Wall -O3
 
 ROOTFLAGS = `root-config --cflags`
-ROOTLIBS  = `root-config --evelibs`
+ROOTLIBS  = `root-config --glibs`
 
 CXXLIBS  += $(ROOTLIBS)
 CXXFLAGS += $(ROOTFLAGS)
