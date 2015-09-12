@@ -6,7 +6,7 @@
 
 using namespace std;
 
-int main(){
+int main(int argc, char** argv){
 
   for (int i=1; i<Mesh::Mz; i++) {
 	for (int j=1; j<Mesh::Mphi; j++) {
@@ -174,7 +174,7 @@ int main(){
 	double T4 = T[1][1][1];
 
 	if (t%1000==0) {
-	  printf("time= %.2f [h]  T1= %.4f  T2= %.4f  T3= %.4f  T4= %.4f [K] Q= %.2f\n", Time/3600, T1, T2, T3, T4, T5);
+	  printf("time= %.2f [h]  T1= %.4f  T2= %.4f  T3= %.4f  T4= %.4f [K] Q= %.2f\n", Time/3600, T1, T2, T3, T4);
 	  for (int i=1; i<Mesh::Mz; i++) {
         for (int j=1; j<Mesh::Mphi; j++) {
           for (int k=1; k<Mesh::Mr; k++) {
