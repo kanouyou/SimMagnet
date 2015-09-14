@@ -1,4 +1,5 @@
 #include <iostream>
+#include <vector>
 #include <TH2F.h>
 #include <TGraph.h>
 #include "QAnalysis.h"
@@ -32,7 +33,7 @@ void QAnalysis::PlotTemperatureDistribution(double qtime, int numPhi, bool scale
       hist->Fill(posID[0], posID[2], temp);
   }
   
-  if (scale==true) hist->GetZaxis()->SetRangeUser(298, 300);
+  if (scale==true) hist->GetZaxis()->SetRangeUser(204, 300);
   hist->SetTitle(Form("time = %.1f [sec]; Z; R; Temperature [K]", qtime));
   hist->Draw("colz");
 }
@@ -86,5 +87,79 @@ double QAnalysis::GetMinimum(string name) {
   TTree* tree = ReadTree(file);
   double min  = tree->GetMinimum(name.c_str());
   return min;
+}
+
+double QAnalysis::GetMaximum(double fTime) {
+  TTree* tree = ReadTree(file);
+  
+  vector<double> fTemperature;
+
+  for (int i=0; i<tree->GetEntries(); i++) {
+    tree->GetEntry(i);
+    if (time==fTime)
+      fTemperature.push_back(temp);
+  }
+  
+  double fMaximum = fTemperature[0];
+
+  for (vector<int>::size_type i=0; i<fTemperature.size(); i++) {
+    if (fTemperature[i]>fMaximum)
+      fMaximum = fTemperature[i];
+  }
+
+  return fMaximum;
+}
+
+double QAnalysis::GetMinimum(double fTime) {
+  TTree* tree = (TTree*)ReadTree(file);
+
+  vector<double> fTemperature;
+
+  for (int i=0; i<tree->GetEntries(); i++) {
+    tree->GetEntry(i);
+    if (time==fTime)
+      fTemperature.push_back(temp);
+  }
+
+  double fMinimum = fTemperature[0];
+
+  for (vector<int>::size_type i=0; i<fTemperature.size(); i++) {
+    if (fTemperature[i]<fMinimum)
+      fMinimum = fTemperature[i];
+  }
+
+  return fMinimum;
+}
+
+vector<double> QAnalysis::GetTimeVector() {
+  TTree* tree = (TTree*)ReadTree(file);
+
+  vector<double> fTime;
+  double tCounter = -999.;
+
+  for (int i=0; i<tree->GetEntries(); i++) {
+    tree->GetEntry(i);
+    if (tCounter!=time) {
+      fTime.push_back(time);
+      tCounter=time;
+    }
+  }
+
+  return fTime;
+}
+
+void QAnalysis::PlotDeltaTemperature() {
+  vector<double> fTime = GetTimeVector();
+  TGraph* gr = new TGraph();
+  double fMin, fMax;
+
+  for (vector<int>::size_type i=0; i<fTime.size(); i++) {
+    fMax = GetMaximum(fTime[i]);
+    fMin = GetMinimum(fTime[i]);
+    cout << "Minimum: " << fMin << " [K], Maximum: " << fMax << " [K]" << endl;
+    gr->SetPoint(i, fTime[i], fMax-fMin);
+  }
+  
+  gr->Draw("al");
 }
 
