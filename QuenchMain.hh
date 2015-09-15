@@ -15,8 +15,8 @@ namespace Mesh {
   const int    Mr   = 19 + 1;
   // time mesh:
   const double t0   = 0.;
-  const double tf   = 3600*24*15.;
-  const int    Mt   = 3600*24*15;
+  const double tf   = 3600*24*8.;
+  const int    Mt   = 3600*24*8;
   const double dt   = (tf - t0) / Mt;
 }
 
