@@ -33,7 +33,7 @@ void QAnalysis::PlotTemperatureDistribution(double qtime, int numPhi, bool scale
       hist->Fill(posID[0], posID[2], temp);
   }
   
-  if (scale==true) hist->GetZaxis()->SetRangeUser(204, 300);
+  if (scale==true) hist->GetZaxis()->SetRangeUser(GetMinimum("temp"), 300);
   hist->SetTitle(Form("time = %.1f [sec]; Z; R; Temperature [K]", qtime));
   hist->Draw("colz");
 }
@@ -152,14 +152,27 @@ void QAnalysis::PlotDeltaTemperature() {
   vector<double> fTime = GetTimeVector();
   TGraph* gr = new TGraph();
   double fMin, fMax;
+  int    cnt = 0;
+
+  cout << "data size: " << fTime.size() << endl;
 
   for (vector<int>::size_type i=0; i<fTime.size(); i++) {
-    fMax = GetMaximum(fTime[i]);
-    fMin = GetMinimum(fTime[i]);
-    cout << "Minimum: " << fMin << " [K], Maximum: " << fMax << " [K]" << endl;
-    gr->SetPoint(i, fTime[i], fMax-fMin);
+    if (i%(fTime.size()/100)==0) {
+      fMax = GetMaximum(fTime[i]);
+      fMin = GetMinimum(fTime[i]);
+      cout << "Time: " << fTime[i] << "[sec], Minimum: " << fMin << " [K], Maximum: " << fMax << " [K]" << endl;
+      gr->SetPoint(cnt, fTime[i]/3600., fMax-fMin);
+      cnt++;
+    }
   }
   
-  gr->Draw("al");
+  gr->SetTitle("; Time [hour]; #Delta T [K]");
+  gr->SetLineStyle(2);
+  gr->SetLineColor(kRed);
+  gr->SetLineWidth(2);
+  gr->SetMarkerSize(0.5);
+  gr->SetMarkerStyle(20);
+  gr->SetMarkerColor(kRed);
+  gr->Draw("ap");
 }
 
