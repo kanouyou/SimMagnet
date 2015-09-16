@@ -3,6 +3,7 @@
 #include <fstream>
 #include "QuenchMain.hh"
 #include "FillData.hh"
+#include "QRegenerator.h"
 
 using namespace std;
 
@@ -16,13 +17,14 @@ int main(int argc, char** argv){
 	  }
 	}
   }
- 
-  //ofstream vfile;
-  //vfile.open("velocity.dat");
+  
+  QRegenerator* gen = new QRegenerator("input.root");
+  gen->SetAddress(100.);
 
   for (int i=0;  i<=Mesh::Mz; i++){
 	for (int j=0; j<=Mesh::Mphi; j++){
 	  for (int k=0; k<=Mesh::Mr; k++){
+		cout << gen->GetTemperature(i, j, k) << endl;
 		T      [i][j][k] = 300.;
 		preT   [i][j][k] = 300.;
 	    Heat   [i][j][k] = 0.;
@@ -31,7 +33,6 @@ int main(int argc, char** argv){
 	}
   }
   
-  //double T5;
   double Qr, Qrr, Qp, Qpp, Qz, Qzz, Q;
   double kAl, kCdt, ktape, term1, term2;
   
@@ -157,8 +158,6 @@ int main(int argc, char** argv){
 		  Q = Qzz + Qpp + Qrr - Qz - Qp - Qr;
 		  T[i][j][k] = preT[i][j][k] + Mesh::dt * Q;
           
-		  //if (i==1 && j==1 && k==2) 
-		    //T5 = Q;
 		}
 	  }
 	}

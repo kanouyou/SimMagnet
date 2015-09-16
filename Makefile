@@ -1,7 +1,8 @@
 TARGET   = SimCooling.exe
 TARGET1  = RunAnalysis.exe
 CXX      = g++
-SRC1     = QuenchMain.cpp QSuperconduct.cpp QMaterial.cpp FillData.cpp
+SRC1     = QuenchMain.cpp QSuperconduct.cpp QMaterial.cpp FillData.cpp \
+           QRegenerator.cpp
 SRC2     = runAnalysis.cpp QAnalysis.cpp
 OBJECTS  = $(SRC1:.cpp=.o)
 OBJECTS1 = $(SRC2:.cpp=.o)
