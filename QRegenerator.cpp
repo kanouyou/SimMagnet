@@ -4,7 +4,7 @@
 
 using namespace std;
 
-QRegenerator::QRegenerator {
+QRegenerator::QRegenerator(string file) {
   fFileName = file;
 }
 
@@ -17,7 +17,7 @@ TTree* QRegenerator::ReadTree() {
   fID = new int[3];
   tree->SetBranchAddress(  "id",    fID);
   tree->SetBranchAddress("time", &fTime);
-  tree->SetBranchAddress("temp", &fTemp);
+  tree->SetBranchAddress("temperature", &fTemp);
 
   return tree;
 }

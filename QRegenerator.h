@@ -5,7 +5,7 @@
 
 class QRegenerator {
   public:
-    QRegenerator(string file);
+    QRegenerator(std::string file);
 	~QRegenerator();
     TTree* ReadTree();
     void   SetAddress(double time);

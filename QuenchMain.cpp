@@ -18,19 +18,44 @@ int main(int argc, char** argv){
 	}
   }
   
-  QRegenerator* gen = new QRegenerator("input.root");
-  gen->SetAddress(100.);
-
-  for (int i=0;  i<=Mesh::Mz; i++){
-	for (int j=0; j<=Mesh::Mphi; j++){
-	  for (int k=0; k<=Mesh::Mr; k++){
-		cout << gen->GetTemperature(i, j, k) << endl;
-		T      [i][j][k] = 300.;
-		preT   [i][j][k] = 300.;
-	    Heat   [i][j][k] = 0.;
-	    trigger[i][j][k] = false;
+  if (Mesh::t0==0.) {
+    for (int i=0;  i<=Mesh::Mz; i++){
+	  for (int j=0; j<=Mesh::Mphi; j++){
+	    for (int k=0; k<=Mesh::Mr; k++){
+		  buffT = gen->GetTemperature(i, j, k);
+		  T      [i][j][k] = 300.;
+		  preT   [i][j][k] = 300.;
+          Heat   [i][j][k] = 0.;
+          trigger[i][j][k] = false;
+	    }
 	  }
-	}
+    }
+  }
+  else {
+    QRegenerator* gen = new QRegenerator("input.root");
+    gen->SetAddress(Mesh::t0);
+    double buffT;
+    
+	for (int i=0;  i<=Mesh::Mz; i++){
+      for (int j=0; j<=Mesh::Mphi; j++){
+	    for (int k=0; k<=Mesh::Mr; k++){
+          buffT = gen->GetTemperature(i, j, k);
+		  T      [i][j][k] = buffT;
+		  preT   [i][j][k] = buffT;
+		  Heat   [i][j][k] = 0.;
+	      trigger[i][j][k] = false;
+	    }
+	  }
+    }
+    
+	SetBoundary(Mesh::t0); 
+    
+	for (int i=0;  i<=Mesh::Mz; i++){
+	  for (int j=0; j<=Mesh::Mphi; j++){
+	    for (int k=0; k<=Mesh::Mr; k++)
+	      preT[i][j][k] = T[i][j][k];
+	  }
+    }
   }
   
   double Qr, Qrr, Qp, Qpp, Qz, Qzz, Q;
