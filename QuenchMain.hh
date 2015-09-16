@@ -336,10 +336,10 @@ void WriteQuenchVelocity() {
       for (int k=1; k<Mesh::Mr; k++) {
         if ( trigger[i][j][k]==false && T[i][j][k]>=CriticalTemperature(field) ) {
           qchTime[i][j][k] = Time;
-		  trigger[i][j][k] = true;
-		}
-	  }
-	}
+          trigger[i][j][k] = true;
+        }
+      }
+    }
   }
 
 }

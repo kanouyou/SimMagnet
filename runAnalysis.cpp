@@ -23,7 +23,7 @@ int main(int argc, char** argv) {
   gStyle->SetOptStat(0);
   gStyle->SetNumberContours(99);
 
-  double time = 800.;
+  double time = 3600.*24*9/12;
 
   QAnalysis* ana = new QAnalysis("output.root");
   
@@ -32,8 +32,8 @@ int main(int argc, char** argv) {
   for (int i=0; i<12; i++) {
     c0->cd(i+1);
     gPad->SetTicks(1,1);
-	gPad->SetRightMargin(0.14);
-	ana->PlotTemperatureDistribution(time*(i+1), 1, true);
+    gPad->SetRightMargin(0.14);
+    ana->PlotTemperatureDistribution(time*(i+1), 1, false);
   }
   
   // Plot time-temperature
@@ -57,8 +57,14 @@ int main(int argc, char** argv) {
   mg->SetTitle(";Time [sec];Temperature [K]");
   mg->Draw("a");
   
-  app->Run();
+  // Plot deta T
+  /*TCanvas* c2 = new TCanvas("deltaT", "deltaT", 600, 500);
+  c2->SetTicks(1,1);
 
+  ana->PlotDeltaTemperature();
+*/
+  app->Run();
+  
   return 0;
 }
 

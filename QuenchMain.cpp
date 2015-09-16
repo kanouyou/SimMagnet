@@ -8,7 +8,8 @@
 using namespace std;
 
 int main(int argc, char** argv){
-
+  double buffT;
+  
   for (int i=1; i<Mesh::Mz; i++) {
 	for (int j=1; j<Mesh::Mphi; j++) {
 	  for (int k=1; k<Mesh::Mr; k++) {
@@ -20,35 +21,34 @@ int main(int argc, char** argv){
   
   if (Mesh::t0==0.) {
     for (int i=0;  i<=Mesh::Mz; i++){
-	  for (int j=0; j<=Mesh::Mphi; j++){
-	    for (int k=0; k<=Mesh::Mr; k++){
-		  buffT = gen->GetTemperature(i, j, k);
-		  T      [i][j][k] = 300.;
-		  preT   [i][j][k] = 300.;
+      for (int j=0; j<=Mesh::Mphi; j++){
+        for (int k=0; k<=Mesh::Mr; k++){
+	  buffT = gen->GetTemperature(i, j, k);
+	  T      [i][j][k] = 300.;
+          preT   [i][j][k] = 300.;
           Heat   [i][j][k] = 0.;
           trigger[i][j][k] = false;
-	    }
-	  }
+        }
+      }
     }
   }
   else {
     QRegenerator* gen = new QRegenerator("input.root");
     gen->SetAddress(Mesh::t0);
-    double buffT;
     
-	for (int i=0;  i<=Mesh::Mz; i++){
+    for (int i=0;  i<=Mesh::Mz; i++){
       for (int j=0; j<=Mesh::Mphi; j++){
-	    for (int k=0; k<=Mesh::Mr; k++){
+        for (int k=0; k<=Mesh::Mr; k++){
           buffT = gen->GetTemperature(i, j, k);
-		  T      [i][j][k] = buffT;
-		  preT   [i][j][k] = buffT;
-		  Heat   [i][j][k] = 0.;
-	      trigger[i][j][k] = false;
-	    }
-	  }
+          T      [i][j][k] = buffT;
+          preT   [i][j][k] = buffT;
+          Heat   [i][j][k] = 0.;
+          trigger[i][j][k] = false;
+        }
+      }
     }
     
-	SetBoundary(Mesh::t0); 
+    SetBoundary(Mesh::t0); 
     
 	for (int i=0;  i<=Mesh::Mz; i++){
 	  for (int j=0; j<=Mesh::Mphi; j++){
@@ -169,23 +169,23 @@ int main(int argc, char** argv){
 
 	//SetGeometryParameter();
 
-	for (int i=1;  i<Mesh::Mz; i++){
-	  for (int j=1; j<Mesh::Mphi; j++){
-		for (int k=1; k<Mesh::Mr; k++){	
+        for (int i=1;  i<Mesh::Mz; i++){
+          for (int j=1; j<Mesh::Mphi; j++){
+            for (int k=1; k<Mesh::Mr; k++){	
 		  
-          Qz  = kz[i][j][k] * (preT  [i][j][k] - preT[i+1][j][k]) / (dz [i][j][k] * rho[i][j][k] * C[i][j][k]);
+              Qz  = kz[i][j][k] * (preT  [i][j][k] - preT[i+1][j][k]) / (dz [i][j][k] * rho[i][j][k] * C[i][j][k]);
 	      Qzz = kz[i][j][k] * (preT[i-1][j][k] - preT  [i][j][k]) / (dzz[i][j][k] * rho[i][j][k] * C[i][j][k]);
-		  Qp  = kp[i][j][k] * (preT  [i][j][k] - preT[i][j+1][k]) / (dp [i][j][k] * rho[i][j][k] * C[i][j][k]);
-		  Qpp = kp[i][j][k] * (preT[i][j-1][k] - preT  [i][j][k]) / (dpp[i][j][k] * rho[i][j][k] * C[i][j][k]);
-		  Qr  = kr[i][j][k] * (preT  [i][j][k] - preT[i][j][k+1]) / (dr [i][j][k] * rho[i][j][k] * C[i][j][k]);
-		  Qrr = kr[i][j][k] * (preT[i][j][k-1] - preT  [i][j][k]) / (drr[i][j][k] * rho[i][j][k] * C[i][j][k]);
+              Qp  = kp[i][j][k] * (preT  [i][j][k] - preT[i][j+1][k]) / (dp [i][j][k] * rho[i][j][k] * C[i][j][k]);
+              Qpp = kp[i][j][k] * (preT[i][j-1][k] - preT  [i][j][k]) / (dpp[i][j][k] * rho[i][j][k] * C[i][j][k]);
+              Qr  = kr[i][j][k] * (preT  [i][j][k] - preT[i][j][k+1]) / (dr [i][j][k] * rho[i][j][k] * C[i][j][k]);
+              Qrr = kr[i][j][k] * (preT[i][j][k-1] - preT  [i][j][k]) / (drr[i][j][k] * rho[i][j][k] * C[i][j][k]);
 
-		  Q = Qzz + Qpp + Qrr - Qz - Qp - Qr;
-		  T[i][j][k] = preT[i][j][k] + Mesh::dt * Q;
+              Q = Qzz + Qpp + Qrr - Qz - Qp - Qr;
+              T[i][j][k] = preT[i][j][k] + Mesh::dt * Q;
           
-		}
-	  }
-	}
+              }
+           }
+        }
 	
 	// setup boundary:
 	SetBoundary(Time);
@@ -196,18 +196,17 @@ int main(int argc, char** argv){
 	double T2 = T[Mesh::Mz-1][1][18];
 	double T3 = T[2][1][1];
 	double T4 = T[1][1][1];
-
-	if (t%1000==0) {
+        
+	if (t%3600==0)
 	  printf("time= %.2f [h]  T1= %.4f  T2= %.4f  T3= %.4f  T4= %.4f [K] \n", Time/3600, T1, T2, T3, T4);
+	if (t%1000==0) {
 	  for (int i=1; i<Mesh::Mz; i++) {
-        for (int j=1; j<Mesh::Mphi; j++) {
-          for (int k=1; k<Mesh::Mr; k++) {
-            dataflow->FillTree(Time, i, j, k, T[i][j][k]);
-		  }
-		}
-	  }
-	}
-  
+            for (int j=1; j<Mesh::Mphi; j++) {
+              for (int k=1; k<Mesh::Mr; k++) 
+                dataflow->FillTree(Time, i, j, k, T[i][j][k]);
+            }
+          }
+        }
   }
     
   dataflow->Close();
